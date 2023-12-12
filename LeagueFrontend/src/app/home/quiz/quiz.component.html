@@ -1,0 +1,91 @@
+<div class="big-container">
+    <div class="container"  *ngIf="!isFinished">
+        <div class="header" *ngIf="currentStep < 3">
+            <div class="progress-indicator">
+                <div class="step" *ngFor="let step of steps; let i = index" [class.active]="i < currentStep">
+                    <div class="circle">{{ i + 1 }}</div>
+                    <div class="line" [class.activeline]="i < currentStep" *ngIf="i < steps.length - 1">
+                        <div class="activeline-inner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mini-Container" *ngIf="currentStep === 0">
+            <div class="input-container">
+            <label for="firstName">What's Your name:</label>
+            <input type="text" id="firstName" [(ngModel)]="userName">
+            </div>
+            <button (click)="nextStep()">Next</button>
+        </div>
+        <div class="mini-Container" *ngIf="currentStep === 1">
+            <label>Choose an attribute:</label>
+            <div class="quiz-list">
+                <button class="quiz-button" *ngFor="let quiz of attributes"  (click)="onLoadData(quiz)" >{{ quiz }}</button>
+            </div>
+
+        </div>
+
+        <div class="mini-Container" *ngIf="currentStep === 2">
+
+            <div class="scoreboard-list">
+                <div class="yanis" *ngIf="top3Players.length >= 1">
+                    <label>Top 3</label>
+                <div class="scoreboard-item" *ngFor="let top3 of top3Players; let i = index">
+                    <span class="scoreboard-position">{{ i + 1 }}</span>
+                    <span class="scoreboard-username">{{ top3.userName }}</span>
+                    <span class="scoreboard-time">{{ top3.time }}</span>
+                    <span class="scoreboard-points">{{ top3.points }}</span>
+                </div>
+                </div>
+                <div *ngIf="top3Players.length === 0">
+                    <label>Anscheindend bist du der erste gib dein bestes </label>
+                </div>
+
+                <button type="submit" (click)="nextStep()">Submit</button>
+            </div>
+
+        </div>
+
+        <div class="mini-Container" *ngIf="currentStep === 3">
+            <div class="quiz-container" *ngIf="isSelected">
+                <label>{{ quiz.question }}</label>
+                <div class="quiz-list">
+                    <div *ngFor="let answer of quiz.answers; let i = index">
+                        <button class="quiz-button" (click)="nextQuiz(answer)">{{ answer }}</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div class="user-time" *ngIf="currentStep === 3">
+        <div  *ngIf="isSelected">
+            <h3>Your Points</h3>
+             {{ playerPoints}}
+            <h3>Your Time</h3>
+           {{ timer | async }}
+        </div>
+    </div>
+
+
+    <div class="mini-Container-end" *ngIf="isFinished">
+        <div class="scoreboard-list">
+            <div class="yanis" *ngIf="top3Players.length >= 1">
+                <label>Top 3</label>
+                <div class="scoreboard-item" *ngFor="let top3 of top3Players; let i = index">
+                    <span class="scoreboard-position">{{ i + 1 }}</span>
+                    <span class="scoreboard-username">{{ top3.userName }}</span>
+                    <span class="scoreboard-time">{{ top3.time }}</span>
+                    <span class="scoreboard-points">{{ top3.points }}</span>
+                </div>
+            </div>
+
+            <button type="submit" (click)="restartQuiz()">Restart</button>
+        </div>
+    </div>
+
+
+</div>
